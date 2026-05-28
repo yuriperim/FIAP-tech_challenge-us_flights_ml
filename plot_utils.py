@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib.axes import Axes
 
 
 def topk_barplot(pd_series: pd.Series, normalize: bool = True, k: int = 10, group_others: bool = True):
@@ -22,12 +23,13 @@ def topk_barplot(pd_series: pd.Series, normalize: bool = True, k: int = 10, grou
     return ax
 
 
-def cumsum_plot(pd_series: pd.Series, annotate: bool = True, threshold: float = 0.8):
+def cumsum_plot(pd_series: pd.Series, annotate: bool = True, threshold: float = 0.8, ax: Axes | None = None):
     freq_count = pd_series.value_counts(normalize=True).cumsum()
 
     x = np.arange(len(freq_count) + 1) / len(freq_count)
 
-    _, ax = plt.subplots(figsize=(8, 5))
+    if ax is None:
+        _, ax = plt.subplots(figsize=(8, 5))
 
     ax.plot(
         x[1:],
