@@ -2,9 +2,10 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
+import seaborn as sns
 
 
-def topk_barplot(pd_series: pd.Series, normalize: bool = True, k: int = 10, group_others: bool = True):
+def topk_barplot(pd_series: pd.Series, normalize: bool = True, k: int = 10, group_others: bool = True) -> Axes:
     freq_count = pd_series.value_counts(normalize=normalize)
 
     if group_others and (len(freq_count) > k):
@@ -23,7 +24,7 @@ def topk_barplot(pd_series: pd.Series, normalize: bool = True, k: int = 10, grou
     return ax
 
 
-def cumsum_plot(pd_series: pd.Series, annotate: bool = True, threshold: float = 0.8, ax: Axes | None = None):
+def cumsum_plot(pd_series: pd.Series, annotate: bool = True, threshold: float = 0.8, ax: Axes | None = None) -> Axes:
     freq_count = pd_series.value_counts(normalize=True).cumsum()
 
     x = np.arange(len(freq_count) + 1) / len(freq_count)
@@ -101,3 +102,13 @@ def cumsum_plot(pd_series: pd.Series, annotate: bool = True, threshold: float = 
     ax.legend()
 
     return ax
+
+
+def plot_cm(cm: np.ndarray, model_name: str) -> None:
+    sns.heatmap(
+        cm, annot=True, fmt="d", cmap="Blues",
+        xticklabels=["Predicted No Delay", "Predicted Delay"],
+        yticklabels=["Actual No Delay", "Actual Delay"]
+    )
+    plt.title(f"Confusion Matrix — {model_name}")
+    plt.show()
