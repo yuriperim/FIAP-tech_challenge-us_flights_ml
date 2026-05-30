@@ -104,11 +104,40 @@ def cumsum_plot(pd_series: pd.Series, annotate: bool = True, threshold: float = 
     return ax
 
 
-def plot_cm(cm: np.ndarray, model_name: str) -> None:
+def cm_plot(cm: np.ndarray, model_name: str) -> None:
     sns.heatmap(
         cm, annot=True, fmt="d", cmap="Blues",
         xticklabels=["Predicted No Delay", "Predicted Delay"],
         yticklabels=["Actual No Delay", "Actual Delay"]
     )
     plt.title(f"Confusion Matrix — {model_name}")
+    plt.show()
+
+
+def regression_plots(y_test: np.ndarray, y_pred: np.ndarray, model_name: str) -> None:
+    fig, (axl, axr) = plt.subplots(1, 2, figsize=(16, 5))
+
+    axl.scatter(y_test, y_pred, alpha=0.3)
+    axl.axline(
+        xy1=(y_test.min(), y_test.min()),
+        xy2=(y_test.max(), y_test.max()),
+        linestyle="--",
+        color="red",
+    )
+    axl.set_xlabel("Actual delay (min)")
+    axl.set_ylabel("Predicted delay (min)")
+    axl.set_title("Actual x Predicted")
+
+    residuals = y_test - y_pred
+    axr.scatter(y_pred, residuals, alpha=0.3)
+    axr.axhline(
+        y=0,
+        linestyle="--",
+        color="red",
+    )
+    axr.set_xlabel("Predicted delay (min)")
+    axr.set_ylabel("Residual (min)")
+    axr.set_title("Residuals x Predicted")
+
+    fig.suptitle(model_name)
     plt.show()
