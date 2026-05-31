@@ -141,3 +141,19 @@ def regression_plots(y_test: np.ndarray, y_pred: np.ndarray, model_name: str) ->
 
     fig.suptitle(model_name)
     plt.show()
+
+
+def pca_2d_feature_plot(df: pd.DataFrame, pd_series: pd.Series) -> None:
+    feature_name = pd_series.name
+    feature_values = pd_series.values
+
+    sns.scatterplot(
+        x=df["PC1"],
+        y=df["PC2"],
+        hue=feature_values,
+        alpha=0.3,
+    )
+    plt.xlabel("PC1")
+    plt.ylabel("PC2")
+    plt.title(f"PCA 2D — {feature_name}")
+    plt.show()
